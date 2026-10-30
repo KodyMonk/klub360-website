@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import TableRequest from '../components/react/TableRequest';
+import { site, tablePerks } from '../content/site';
+import { getPhotos } from '../lib/data';
+
+const photos = await getPhotos();
+const roman = ['i.', 'ii.', 'iii.'];
+---
+<Base title="Book a Table" current="table" description="Reserve a VIP table at Klub360, Bahrain. Choose your night and group size and send your request on WhatsApp.">
+  <PageHead eyebrow="VIP tables" title="Upgrade your" accent="night." lead="A table in a privileged spot overlooking the dance floor, world-class service and a broad selection of premium drinks." />
+
+  <section class="container section-end">
+    <div class="card reserve">
+      <div class="photo-panel">
+        <img src={photos.vip_table.url} alt={photos.vip_table.alt} />
+        <div class="caption">
+          <p class="small-caps" style="display: flex; align-items: center; gap: 12px; color: var(--text-2)"><span style="width: 22px; height: 1px; background: var(--accent)"></span>Limited tables nightly</p>
+          <p class="quote">The best seat<br />in the house.</p>
+        </div>
+      </div>
+      <div class="builder">
+        <div>
+          <h2 class="h2" style="font-size: 40px">Request a <span class="serif">table.</span></h2>
+          <p class="muted" style="margin: 12px 0 0; font-weight: 300">Choose your night, arrival time and group. WhatsApp opens with your request ready to send.</p>
+        </div>
+        <TableRequest client:load full whatsapp={site.whatsapp} phone={site.phone} phoneDisplay={site.phoneDisplay} />
+      </div>
+    </div>
+
+    <div class="cols" style="margin-top: 24px">
+      {tablePerks.map((p, i) => (
+        <div style="padding-bottom: 0">
+          <span class="numeral">{roman[i]}</span>
+          <p style="color: var(--text); font-size: 17px; font-weight: 400">{p}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>

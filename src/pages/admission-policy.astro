@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import { site, admissionRules } from '../content/site';
+const roman = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.', 'vii.', 'viii.'];
+---
+<Base title="Admission Policy" current="admission" description="Klub360 admission policy: 21+, smart casual dress code, open every day 6 PM – 2:30 AM.">
+  <PageHead eyebrow="Admission policy" title="Before you" accent="arrive." />
+
+  <section class="container">
+    <div class="grid grid-4" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr))">
+      <div class="tile"><p class="small-caps" style="margin: 0">Age</p><p class="big" style="margin-top: 8px; font-size: 44px; color: var(--text)">{site.age}</p></div>
+      <div class="tile"><p class="small-caps" style="margin: 0">Open every day</p><p class="big" style="margin-top: 8px; font-size: 44px; color: var(--text)">{site.hoursShort}</p></div>
+      <div class="tile"><p class="small-caps" style="margin: 0">Dress code</p><p class="big" style="margin-top: 8px; font-size: 44px; color: var(--text)">{site.dress}</p></div>
+    </div>
+  </section>
+
+  <section class="container section section-end">
+    <div class="split">
+      <p class="label side" style="margin: 0"><b>01</b>House rules</p>
+      <div class="main lines">
+        {admissionRules.map((r, i) => (
+          <div class="rule-row">
+            <span class="numeral">{roman[i]}</span>
+            <div><h2>{r.title}</h2><p>{r.text}</p></div>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div class="actions" style="margin-top: 72px">
+      <a class="btn btn-primary" href="/table/">Reserve a table <span aria-hidden="true">→</span></a>
+      <a class="btn" href="/contact/">Questions? Contact us</a>
+    </div>
+  </section>
+</Base>

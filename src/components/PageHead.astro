@@ -1,0 +1,15 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  accent?: string; // italic silver word(s) after the title
+  lead?: string;
+}
+const { eyebrow, title, accent, lead } = Astro.props;
+---
+<section class="container page-head">
+  <p class="eyebrow">{eyebrow}</p>
+  <h1 class="display">{title}{accent && <> <span class="serif silver">{accent}</span></>}</h1>
+  {lead && <p class="lead">{lead}</p>}
+  <slot />
+</section>

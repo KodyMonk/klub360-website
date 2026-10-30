@@ -1,0 +1,60 @@
+---
+import Base from '../layouts/Base.astro';
+import { vip, waLink } from '../content/site';
+const roman = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.'];
+const join = waLink(vip.joinMessage);
+---
+<Base title="VIP Memberships" current="vip" description="VIP Black membership at Klub360: free entry every night, no queues, priority tables and privileges across Elite Crystal Hotel.">
+  <section class="container page-head">
+    <div style="display: flex; flex-wrap: wrap; gap: 64px; align-items: center">
+      <div style="flex: 1 1 520px; min-width: 0">
+        <p class="eyebrow">VIP membership</p>
+        <h1 class="display">VIP <span class="serif silver">Black.</span></h1>
+        <p class="lead" style="max-width: 480px">Free entry every night, no queues, priority tables and privileges across Elite Crystal Hotel.</p>
+        <div class="actions" style="margin-top: 40px; gap: 28px">
+          <a class="btn btn-primary" href={join} rel="noopener">Join on WhatsApp <span aria-hidden="true">→</span></a>
+          <p class="muted" style="margin: 0; font-size: 15px"><span style="font-size: 28px; font-weight: 300; color: var(--text); letter-spacing: -.02em">{vip.price}</span> BHD</p>
+        </div>
+      </div>
+      <div style="flex: 1 1 420px; min-width: 0; display: flex; justify-content: center; padding: 24px 0">
+        <div class="member-card" aria-hidden="true">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start">
+            <img src="/images/logo-wordmark.png" alt="" style="height: 34px; width: auto" />
+            <span class="small-caps" style="letter-spacing: .3em">Member</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: flex-end">
+            <span class="serif silver" style="font-size: 40px; line-height: 1">VIP Black</span>
+            <span style="width: 8px; height: 8px; border-radius: 999px; background: var(--accent)"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container">
+    <p class="label"><b>01</b>At Klub360</p>
+    <div class="grid grid-4">
+      {vip.headline.map((h) => <div class="tile"><p class="big">{h.big}</p><p>{h.text}</p></div>)}
+    </div>
+    <div class="lines" style="margin-top: 56px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); column-gap: 48px">
+      {vip.club.map((b, i) => (
+        <div style="display: flex; gap: 18px; padding: 22px 0"><span class="numeral" style="min-width: 28px">{roman[i]}</span><span>{b}</span></div>
+      ))}
+    </div>
+  </section>
+
+  <section class="container section">
+    <p class="label"><b>02</b>Across Elite Crystal Hotel</p>
+    <div class="cols">
+      {vip.hotel.map((h) => <div><h3 class="h3">{h.title}</h3><p>{h.text}</p></div>)}
+    </div>
+    <p class="dim" style="margin: 24px 0 0; font-size: 13px">*Terms and conditions apply.</p>
+  </section>
+
+  <section class="container section section-end">
+    <div class="card card-pad row-between" style="align-items: center">
+      <h2 class="h2" style="font-size: clamp(36px, 4vw, 56px)">Become a <span class="serif">member.</span></h2>
+      <a class="btn btn-primary" href={join} rel="noopener">Join {vip.name} · {vip.price} BHD <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+</Base>

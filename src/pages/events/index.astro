@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHead from '../../components/PageHead.astro';
+import EventFeature from '../../components/EventFeature.astro';
+import ExpireEvents from '../../components/ExpireEvents.astro';
+import { site, socials } from '../../content/site';
+import { getUpcomingEvents, getPastEvents } from '../../lib/data';
+import { longDate } from '../../lib/format';
+
+const upcoming = await getUpcomingEvents();
+const past = (await getPastEvents()).slice(0, 8);
+const follow = socials.filter((s) => s.label !== 'Facebook');
+---
+<Base title="Events" current="events" description="What's on at Klub360, Bahrain: this month's headline night, tickets and VIP table reservations.">
+  <PageHead eyebrow="What's on" title="This month at" accent="KLUB360°." lead={`One headline night every month. Open ${site.hours.toLowerCase()}.`} />
+
+  <section class="container" data-events style="display: flex; flex-direction: column; gap: 24px">
+    {upcoming.map((e) => <EventFeature event={e} />)}
+    <div class="card card-pad" data-events-empty hidden={upcoming.length > 0}>
+      <p class="serif" style="margin: 0; font-size: 34px; line-height: 1.1">This month's lineup is coming soon.</p>
+      <p class="muted" style="margin: 6px 0 0">Follow us to hear first when it's announced.</p>
+    </div>
+  </section>
+
+  <section class="container section">
+    <div class="row-between" style="padding: 40px 48px; border: 1px dashed var(--line-3); border-radius: var(--radius-lg); align-items: center">
+      <div>
+        <p class="serif" style="margin: 0; font-size: 34px; line-height: 1.1">A new headline night every month.</p>
+        <p class="muted" style="margin: 6px 0 0">Follow us to hear first when the next one is announced.</p>
+      </div>
+      <div class="actions" style="gap: 12px">
+        {follow.map((s) => <a class="btn btn-sm" href={s.href} rel="noopener">{s.label}</a>)}
+      </div>
+    </div>
+  </section>
+
+  {past.length > 0 && (
+    <section class="container section">
+      <p class="label"><b>—</b>Past events</p>
+      <div class="grid grid-photos">
+        {past.map((e) => (
+          <a href={`/events/${e.slug}/`} style="text-decoration: none; display: flex; flex-direction: column; gap: 10px">
+            {e.flyer_url
+              ? <img class="photo" src={e.flyer_url} alt={`${e.title} flyer`} loading="lazy" />
+              : <span class="art-slot"><span>{e.title}</span></span>}
+            <span style="font-size: 14px">{e.title}</span>
+            <span class="dim" style="font-size: 13px; margin-top: -8px">{longDate(e.event_date)}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <div class="section-end"></div>
+  <ExpireEvents />
+</Base>

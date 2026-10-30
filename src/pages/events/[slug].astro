@@ -1,0 +1,88 @@
+---
+import Base from '../../layouts/Base.astro';
+import { site, waLink } from '../../content/site';
+import { getPublishedEvents } from '../../lib/data';
+import { dayMonth, weekday, longDate, todayBahrain } from '../../lib/format';
+import type { EventRow } from '../../lib/supabase';
+
+export async function getStaticPaths() {
+  const events = await getPublishedEvents();
+  return events.map((event) => ({ params: { slug: event.slug }, props: { event } }));
+}
+
+const { event } = Astro.props as { event: EventRow };
+const isPast = event.event_date < todayBahrain();
+const year = event.event_date.slice(0, 4);
+const tableMsg = `Hi Klub360, I'd like to reserve a table for ${event.title} on ${longDate(event.event_date)}.`;
+const description = event.description || `${event.title} at Klub360, Bahrain — ${longDate(event.event_date)}.`;
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: event.title,
+  startDate: event.event_date,
+  eventStatus: 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  image: event.flyer_url ? [event.flyer_url] : undefined,
+  description,
+  location: { '@type': 'Place', name: 'Klub360', address: site.address },
+  performer: event.headliner ? { '@type': 'Person', name: event.headliner } : undefined,
+  offers: event.ticket_url ? { '@type': 'Offer', url: event.ticket_url } : undefined,
+};
+---
+<Base title={event.title} current="events" description={description} image={event.flyer_url || undefined}>
+  <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(ld)} />
+
+  <section class="container" style="padding-top: 40px">
+    <a class="link-quiet" href="/events/">← All events</a>
+  </section>
+
+  <section class="container" style="padding-top: 40px">
+    <div style="display: flex; flex-wrap: wrap; gap: 64px; align-items: flex-start">
+      <div style="flex: 0 1 540px; min-width: 280px">
+        {event.flyer_url
+          ? <img class="art" style="border-radius: 24px; border: 1px solid var(--line)" src={event.flyer_url} alt={`${event.title} flyer`} width="1080" height="1350" />
+          : <span class="art-slot" style="border-radius: 24px"><span>Event artwork</span><span>1080 × 1350</span></span>}
+      </div>
+      <div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 28px; padding-top: 12px">
+        <p class="eyebrow" style="margin: 0">{isPast ? 'Past event' : 'Upcoming event'}</p>
+        <div style="display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap">
+          <span class="date-big" style="font-size: clamp(72px, 8vw, 104px)">{dayMonth(event.event_date)}</span>
+          <span class="small-caps">{weekday(event.event_date)} · {year}</span>
+        </div>
+        <h1 class="h2" style="font-size: clamp(40px, 4.4vw, 64px)">
+          {event.title}
+          {event.headliner && <> <span class="serif dim">ft.</span> {event.headliner}</>}
+        </h1>
+        {event.description && <p class="lead" style="margin: 0; max-width: 500px">{event.description}</p>}
+
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line-2)">
+          <div style="padding: 18px 16px 18px 0; border-bottom: 1px solid var(--line-2)"><p class="small-caps" style="margin: 0">Doors</p><p style="margin: 4px 0 0; font-size: 18px">{event.doors || site.doorsDefault}</p></div>
+          <div style="padding: 18px 0 18px 16px; border-left: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2)"><p class="small-caps" style="margin: 0">Music</p><p style="margin: 4px 0 0; font-size: 18px">{event.genre || '—'}</p></div>
+          <div style="padding: 18px 16px 18px 0; border-bottom: 1px solid var(--line-2)"><p class="small-caps" style="margin: 0">Entry</p><p style="margin: 4px 0 0; font-size: 18px">{site.age} · {site.dress}</p></div>
+          <div style="padding: 18px 0 18px 16px; border-left: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2)"><p class="small-caps" style="margin: 0">Tickets from</p><p style="margin: 4px 0 0; font-size: 18px">{event.price ? `${event.price} BHD` : '—'}</p></div>
+        </div>
+
+        {!isPast && (
+          <div class="actions">
+            {event.ticket_url && <a class="btn btn-primary" href={event.ticket_url} rel="noopener">Get tickets <span aria-hidden="true">→</span></a>}
+            <a class={event.ticket_url ? 'btn' : 'btn btn-primary'} href={waLink(tableMsg)}>Reserve a table for this night</a>
+          </div>
+        )}
+        <p class="dim" style="margin: 0; font-size: 13px">VIP Black members get 30% off special event entry.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="container section section-end">
+    <p class="label"><b>—</b>Good to know</p>
+    <div class="grid grid-3">
+      <div class="tile"><p class="numeral" style="margin: 0; font-size: 22px">i.</p><h3 class="h3" style="margin: 10px 0 8px; font-size: 20px">Arrive early</h3><p>The club fills up fast on special nights. VIP pass holders, text us your reservation.</p></div>
+      <div class="tile"><p class="numeral" style="margin: 0; font-size: 22px">ii.</p><h3 class="h3" style="margin: 10px 0 8px; font-size: 20px">Dress to impress</h3><p>Smart western attire. Entry is {site.age} and management reserves the right of admission.</p></div>
+      <div class="tile"><p class="numeral" style="margin: 0; font-size: 22px">iii.</p><h3 class="h3" style="margin: 10px 0 8px; font-size: 20px">Getting here</h3><p>Ground floor, {site.locationShort}. <a href={site.mapUrl} rel="noopener">Open map</a></p></div>
+    </div>
+    <div class="row-between" style="margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--line)">
+      <a class="link-quiet" href="/events/">← Back to all events</a>
+      <a class="link-quiet" href="/admission-policy/">Read our admission policy →</a>
+    </div>
+  </section>
+</Base>

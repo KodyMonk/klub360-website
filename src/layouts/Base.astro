@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../content/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  current?: string;
+  image?: string;
+  noindex?: boolean;
+  bare?: boolean; // no header/footer (admin)
+}
+
+const {
+  title,
+  description = "Klub360 — Bahrain's premier nightclub at the Elite Crystal Hotel, Juffair. International DJs, VIP tables and premium drinks. Open every day 6 PM – 2:30 AM.",
+  current = '',
+  image = '/images/hero.jpg',
+  noindex = false,
+  bare = false,
+} = Astro.props;
+
+const fullTitle = title ? `${title} – Klub360` : `Klub360 – ${site.tagline}`;
+const canonical = new URL(Astro.url.pathname, site.url).toString();
+const ogImage = new URL(image, site.url).toString();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content="#08080a" />
+    <link rel="icon" type="image/png" href="/images/logo-wordmark.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Klub360" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
+    />
+    <slot name="head" />
+  </head>
+  <body>
+    {!bare && <Nav current={current} />}
+    <main id="main">
+      <slot />
+    </main>
+    {!bare && <Footer />}
+  </body>
+</html>

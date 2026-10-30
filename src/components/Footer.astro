@@ -1,0 +1,47 @@
+---
+import { site, socials } from '../content/site';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="top">
+      <div class="col brand">
+        <img src="/images/logo-full.png" alt="Klub360, The World's Finest Clubs" width="180" height="85" loading="lazy" />
+        <p class="dim" style="margin: 10px 0 0; max-width: 240px">Ground floor, {site.locationShort}. Open every day, {site.hoursShort}.</p>
+      </div>
+      <div class="col">
+        <p class="small-caps" style="margin: 0 0 6px">Explore</p>
+        <a href="/events/">Events</a>
+        <a href="/artists/">Artists</a>
+        <a href="/gallery/">Gallery</a>
+        <a href={site.menuPdf}>Our menu</a>
+      </div>
+      <div class="col">
+        <p class="small-caps" style="margin: 0 0 6px">The club</p>
+        <a href="/about/">About</a>
+        <a href="/vip-memberships/">VIP memberships</a>
+        <a href="/table/">Book a table</a>
+        <a href="/admission-policy/">Admission policy</a>
+        <a href="/careers/">Careers</a>
+      </div>
+      <div class="col">
+        <p class="small-caps" style="margin: 0 0 6px">Contact</p>
+        <a href={`https://wa.me/${site.whatsapp}`}>WhatsApp {site.whatsappDisplay}</a>
+        <a href={`tel:${site.phone}`}>Tel {site.phoneDisplay}</a>
+        <a href="/contact/">Send a message</a>
+      </div>
+      <div class="col">
+        <p class="small-caps" style="margin: 0 0 6px">Follow</p>
+        {socials.map((s) => <a href={s.href} rel="noopener">{s.label}</a>)}
+      </div>
+    </div>
+    <div class="bottom">
+      <span>© {year} Klub 360. {site.operator}.</span>
+      <nav aria-label="Legal">
+        <a href="/privacy-policy/">Privacy policy</a>
+        <a href="/terms/">Terms</a>
+        <a href="/contact/">Contact</a>
+      </nav>
+    </div>
+  </div>
+</footer>

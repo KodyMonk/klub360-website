@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import { legalUpdated, type LegalSection } from '../content/legal';
+
+interface Props {
+  title: string;
+  heading: string;
+  accent: string;
+  intro: string;
+  sections: LegalSection[];
+}
+const { title, heading, accent, intro, sections } = Astro.props;
+const num = (i: number) => String(i + 1).padStart(2, '0');
+---
+<Base title={title} current="legal">
+  <section class="container page-head" style="padding-bottom: 64px">
+    <p class="eyebrow">Legal</p>
+    <h1 class="display">{heading} <span class="serif silver">{accent}</span></h1>
+    <p class="dim" style="margin: 24px 0 0; font-size: 14px">Last updated: {legalUpdated}</p>
+  </section>
+
+  <section class="container section-end">
+    <div class="split" style="align-items: flex-start">
+      <nav class="toc side" aria-label="On this page">
+        {sections.map((s, i) => <a href={`#${s.id}`}><span class="numeral" style="min-width: 22px">{num(i)}</span>{s.title}</a>)}
+      </nav>
+      <div class="main" style="display: flex; flex-direction: column; gap: 48px">
+        <p style="margin: 0; font-size: clamp(20px, 2vw, 24px); font-weight: 300; line-height: 1.5; letter-spacing: -.01em">{intro}</p>
+        {sections.map((s, i) => (
+          <div class="legal-section" id={s.id}>
+            <h2><span class="numeral" style="font-size: 18px">{num(i)}</span>{s.title}</h2>
+            {s.paras.map((p) => <p>{p}</p>)}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

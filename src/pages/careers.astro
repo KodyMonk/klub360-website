@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import CareersForm from '../components/react/CareersForm';
+import { careersRoles } from '../content/site';
+---
+<Base title="Careers" current="careers" description="Work at Klub360, Bahrain. We hire bartenders, waiters, waitresses, hostesses and security.">
+  <PageHead eyebrow="Careers" title="Join the" accent="team." lead="Looking to work at Bahrain's most sophisticated nightclub? Fill out the form and we'll get back to you if you're a good fit." />
+  <section class="container section-end">
+    <div class="card" style="max-width: 860px; padding: clamp(24px, 4vw, 56px)">
+      <CareersForm client:visible roles={careersRoles} />
+    </div>
+  </section>
+</Base>

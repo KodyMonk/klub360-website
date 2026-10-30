@@ -1,0 +1,142 @@
+---
+import Base from '../layouts/Base.astro';
+import EventFeature from '../components/EventFeature.astro';
+import ExpireEvents from '../components/ExpireEvents.astro';
+import MapCard from '../components/MapCard.astro';
+import TableRequest from '../components/react/TableRequest';
+import { site, pillars, tablePerks } from '../content/site';
+import { getHomepageEvent, getPhotos, getMoments } from '../lib/data';
+
+const event = await getHomepageEvent();
+const photos = await getPhotos();
+const moments = await getMoments();
+const roman = ['i.', 'ii.', 'iii.', 'iv.'];
+---
+<Base current="home" image={photos.hero.url}>
+  <!-- Hero -->
+  <section class="container">
+    <div class="hero">
+      <div class="copy">
+        <p class="eyebrow">Juffair · Bahrain</p>
+        <h1 class="display" style="font-size: clamp(56px, 7.4vw, 108px)">Bahrain's premier<br /><span class="serif silver">nightclub.</span></h1>
+        <p class="lead" style="max-width: 440px; margin-top: 36px">World-class music, unforgettable nights and the best parties on the island.</p>
+        <div class="actions" style="margin-top: 44px">
+          <a class="btn btn-primary" href="/table/">Reserve a table <span aria-hidden="true">→</span></a>
+          <a class="link" href="/events/">See what's on</a>
+        </div>
+      </div>
+      <div class="visual">
+        <img src={photos.hero.url} alt={photos.hero.alt} fetchpriority="high" />
+        <div class="glass">
+          <div>
+            <p class="small-caps" style="margin: 0; color: var(--soft)">Every day</p>
+            <p style="margin: 2px 0 0; font-size: 15px; font-weight: 500">Open {site.hoursShort}</p>
+          </div>
+          <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-2)"><span class="dot" aria-hidden="true"></span>Tables available</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="meta-strip">
+      <div><p class="small-caps" style="margin: 0">Location</p><a href="#location">{site.locationShort}</a></div>
+      <div><p class="small-caps" style="margin: 0">Open</p><p>{site.hours}</p></div>
+      <div><p class="small-caps" style="margin: 0">Reservations</p><a href={`https://wa.me/${site.whatsapp}`}>{site.whatsappDisplay}</a></div>
+      <div><p class="small-caps" style="margin: 0">Entry</p><p>{site.age} · {site.dress}</p></div>
+    </div>
+  </section>
+
+  <!-- Event -->
+  <section class="container section" id="events" data-events>
+    <div class="row-between head-row">
+      <p class="label"><b>01</b>Upcoming event</p>
+      <a class="link-quiet" href="/events/">View all events →</a>
+    </div>
+    {event ? (
+      <>
+        <EventFeature event={event} />
+        <div class="card card-pad" data-events-empty hidden>
+          <p class="serif" style="margin: 0; font-size: 34px">Next event coming soon.</p>
+          <p class="muted" style="margin: 6px 0 0">Follow @klub360 to hear first.</p>
+        </div>
+      </>
+    ) : (
+      <div class="card card-pad row-between" style="align-items: center">
+        <div>
+          <p class="serif" style="margin: 0; font-size: 34px; line-height: 1.1">This month's lineup is coming soon.</p>
+          <p class="muted" style="margin: 6px 0 0">Follow @klub360 to hear first when it's announced.</p>
+        </div>
+        <a class="btn btn-sm" href="https://instagram.com/klub360" rel="noopener">Follow on Instagram</a>
+      </div>
+    )}
+  </section>
+
+  <!-- Pillars -->
+  <section class="container section" id="about">
+    <p class="label"><b>02</b>The experience</p>
+    <div class="cols">
+      {pillars.map((p, i) => (
+        <div>
+          <span class="numeral" style="font-size: 22px">{roman[i]}</span>
+          <h3 class="h3">{p.title}</h3>
+          <p>{p.text}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Moments -->
+  <section class="container section">
+    <div class="row-between head-row">
+      <p class="label"><b>03</b>Club moments</p>
+      <a class="link-quiet" href="/gallery/">View gallery →</a>
+    </div>
+    <div class="grid grid-photos">
+      {moments.map((m) => <img class="photo" src={m.url} alt={m.alt} loading="lazy" />)}
+    </div>
+  </section>
+
+  <!-- VIP tables -->
+  <section class="container section" id="reserve">
+    <div class="card reserve">
+      <div class="photo-panel">
+        <img src={photos.vip_table.url} alt={photos.vip_table.alt} loading="lazy" />
+        <div class="caption">
+          <p class="small-caps" style="display: flex; align-items: center; gap: 12px; color: var(--text-2)"><span style="width: 22px; height: 1px; background: var(--accent)"></span>Limited tables nightly</p>
+          <p class="quote">The best seat<br />in the house.</p>
+        </div>
+      </div>
+      <div class="builder">
+        <div>
+          <p class="label" style="margin-bottom: 18px"><b>04</b>VIP tables</p>
+          <h2 class="h2">Reserve your <span class="serif silver">table.</span></h2>
+          <p class="muted" style="margin: 18px 0 0; max-width: 440px; font-weight: 300">Pick your night and group size. We'll open WhatsApp with your request ready to send.</p>
+        </div>
+        <TableRequest client:visible whatsapp={site.whatsapp} phone={site.phone} phoneDisplay={site.phoneDisplay} />
+        <div class="perks">
+          {tablePerks.map((p, i) => <div><p class="numeral">{roman[i]}</p><p style="margin-top: 4px">{p}</p></div>)}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Location -->
+  <section class="container section section-end" id="location">
+    <div class="row-between head-row">
+      <p class="label"><b>05</b>Find us</p>
+      <a class="link-quiet" href={site.mapUrl} rel="noopener">Open in Google Maps →</a>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: stretch">
+      <div style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding: 8px 0">
+        <h2 class="h2" style="font-size: clamp(36px, 3.8vw, 56px)">Ground floor,<br /><span class="serif muted">Elite Crystal Hotel.</span></h2>
+        <div class="lines">
+          <div style="padding: 18px 0"><p class="small-caps" style="margin: 0">Address</p><p style="margin: 4px 0 0; font-size: 15px">{site.address}</p></div>
+          <div style="padding: 18px 0"><p class="small-caps" style="margin: 0">Hours</p><p style="margin: 4px 0 0; font-size: 15px">{site.hours}</p></div>
+        </div>
+        <a class="btn" style="align-self: flex-start" href={site.mapUrl} rel="noopener">Get directions <span aria-hidden="true">→</span></a>
+      </div>
+      <div style="flex: 1 1 560px; min-width: 0"><MapCard /></div>
+    </div>
+  </section>
+
+  <ExpireEvents />
+</Base>

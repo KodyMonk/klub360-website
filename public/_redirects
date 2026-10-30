@@ -1,0 +1,8 @@
+# Cloudflare Pages redirects (old WordPress addresses → new pages)
+/carrers       /careers/  301
+/carrers/      /careers/  301
+/privacy       /privacy-policy/  301
+/home          /  301
+/wp-admin      /admin/  302
+/wp-admin/*    /admin/  302
+/wp-login.php  /admin/  302

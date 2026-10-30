@@ -1,0 +1,9 @@
+Copy the venue menu PDF into this "public" folder and name it exactly:
+
+    our_menu.pdf
+
+It will then be served at https://klub360bh.com/our_menu.pdf — the same
+address the QR codes in the venue already point to.
+
+To update the menu later, replace the file with a new one using the same name.
+You can delete this text file afterwards.

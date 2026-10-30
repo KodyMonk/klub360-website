@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import { getGallery, getMoments } from '../lib/data';
+
+const gallery = await getGallery();
+// Until gallery photos are uploaded, show the homepage "club moments".
+const items = gallery.length
+  ? gallery.map((g) => ({ url: g.url, alt: g.alt || 'Klub360', tag: g.tag }))
+  : (await getMoments()).map((m) => ({ ...m, tag: 'venue' as const }));
+const tags = [
+  { key: 'all', label: 'All' },
+  { key: 'events', label: 'Events' },
+  { key: 'venue', label: 'The venue' },
+];
+---
+<Base title="Gallery" current="gallery" description="Photos from Klub360 nights in Bahrain.">
+  <section class="container page-head" style="padding-bottom: 56px">
+    <p class="eyebrow">Gallery</p>
+    <div class="row-between" style="align-items: flex-end; gap: 24px">
+      <h1 class="display">360° <span class="serif silver">of it.</span></h1>
+      <a class="btn btn-sm" href="https://instagram.com/klub360" rel="noopener">Follow @klub360</a>
+    </div>
+  </section>
+
+  <section class="container" style="padding-bottom: 40px">
+    <div class="chips" id="gallery-filters" role="group" aria-label="Filter photos">
+      {tags.map((t, i) => <button class="chip" type="button" data-filter={t.key} aria-pressed={i === 0 ? 'true' : 'false'}>{t.label}</button>)}
+    </div>
+  </section>
+
+  <section class="container section-end">
+    <div class="grid grid-gallery" id="gallery-grid">
+      {items.map((p) => <img class="photo" src={p.url} alt={p.alt} loading="lazy" data-tag={p.tag} />)}
+      <a href="https://instagram.com/klub360" rel="noopener" class="art-slot" style="padding: 32px; align-items: flex-start; justify-content: center">
+        <span class="serif" style="font-size: 32px; line-height: 1.1; color: var(--text); letter-spacing: 0; text-transform: none">See more on Instagram</span>
+        <span>@klub360 →</span>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('#gallery-filters [data-filter]');
+  const photos = document.querySelectorAll<HTMLElement>('#gallery-grid [data-tag]');
+  buttons.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const f = btn.dataset.filter;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      photos.forEach((p) => (p.hidden = f !== 'all' && p.dataset.tag !== f));
+    }),
+  );
+</script>

@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import { getPhotos, getMoments } from '../lib/data';
+const photos = await getPhotos();
+const moments = (await getMoments()).slice(0, 4);
+const features = [
+  { title: 'Flair bartenders', text: 'Cocktails served with a show.' },
+  { title: 'Murals & lighting', text: 'Art and light design in every corner.' },
+  { title: 'Video wall', text: 'Visual effects synced to the music.' },
+  { title: 'World-class service', text: 'A team that knows you by name.' },
+];
+const roman = ['i.', 'ii.', 'iii.', 'iv.'];
+---
+<Base title="About" current="about" description="KLUB360° — the most sophisticated nightclub in Bahrain, on the ground floor of the Elite Crystal Hotel in Juffair.">
+  <section class="container page-head" style="padding-bottom: 80px">
+    <p class="eyebrow">About us</p>
+    <h1 class="display" style="max-width: 1100px; font-size: clamp(48px, 6vw, 88px); line-height: 1">The place to see <span class="serif silver">and be seen.</span></h1>
+  </section>
+
+  <section class="container">
+    <img src={photos.about_banner.url} alt={photos.about_banner.alt} style="width: 100%; height: clamp(320px, 42vw, 560px); object-fit: cover; border-radius: var(--radius-lg)" />
+  </section>
+
+  <section class="container section">
+    <div class="split">
+      <p class="label side" style="margin: 0"><b>01</b>Welcome to KLUB360°</p>
+      <div class="main" style="display: flex; flex-direction: column; gap: 24px">
+        <p style="margin: 0; font-size: clamp(22px, 2.2vw, 30px); font-weight: 300; line-height: 1.4; letter-spacing: -.015em">By far the most sophisticated nightclub in Bahrain. Our goal is simple: to give you a great night out at the best nightclub on the island.</p>
+        <p class="muted" style="margin: 0; font-size: 17px; font-weight: 300">Situated on the ground level of the Elite Crystal Hotel in Juffair, KLUB360° is made for the discerning guest who likes to relax, socialise and party in a stunning environment.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="container section">
+    <div class="split" style="align-items: flex-start">
+      <div class="side">
+        <p class="label" style="margin-bottom: 20px"><b>02</b>Why 360°?</p>
+        <h2 class="h2" style="font-size: clamp(36px, 4vw, 56px)">Whichever way <span class="serif">you turn.</span></h2>
+      </div>
+      <div class="main cols" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))">
+        {features.map((f, i) => (
+          <div style="padding-block: 28px">
+            <span class="numeral">{roman[i]}</span>
+            <h3 class="h3" style="font-size: 20px">{f.title}</h3>
+            <p>{f.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="container section section-end">
+    <div class="grid grid-photos" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))">
+      {moments.map((m) => <img class="photo" src={m.url} alt={m.alt} loading="lazy" />)}
+    </div>
+    <div class="actions" style="margin-top: 56px">
+      <a class="btn btn-primary" href="/table/">Reserve a table <span aria-hidden="true">→</span></a>
+      <a class="btn" href="/events/">See what's on</a>
+    </div>
+  </section>
+</Base>

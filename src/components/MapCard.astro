@@ -1,0 +1,31 @@
+---
+import { site } from '../content/site';
+interface Props { height?: number }
+const { height = 480 } = Astro.props;
+---
+<a class="map-card" href={site.mapUrl} rel="noopener" aria-label="Open Klub360 location in Google Maps" style={`min-height: ${height}px`}>
+  <svg aria-hidden="true" viewBox="0 0 800 520" preserveAspectRatio="xMidYMid slice">
+    <rect width="800" height="520" fill="#0F0F11"></rect>
+    <path d="M0 0 H800 V96 C700 120 620 88 540 110 C460 132 380 96 300 118 C220 140 120 104 0 128 Z" fill="#0B1116"></path>
+    <g stroke="#1B1B1F" stroke-width="14" fill="none" stroke-linecap="round">
+      <path d="M-20 250 C180 236 360 270 560 248 S760 230 840 238"></path>
+      <path d="M300 130 L330 560"></path>
+      <path d="M610 120 C590 260 620 380 600 560"></path>
+    </g>
+    <g stroke="#17171A" stroke-width="6" fill="none" stroke-linecap="round">
+      <path d="M-20 390 L840 372"></path><path d="M120 140 L150 560"></path><path d="M460 125 L470 560"></path>
+      <path d="M720 120 L740 560"></path><path d="M-20 180 C200 176 420 190 840 172"></path><path d="M150 470 L740 455"></path>
+    </g>
+    <circle cx="470" cy="262" r="46" fill="#EC7820" opacity="0.10"></circle>
+    <circle cx="470" cy="262" r="22" fill="#EC7820" opacity="0.18"></circle>
+    <circle cx="470" cy="262" r="9" fill="#EC7820"></circle>
+    <circle cx="470" cy="262" r="3.5" fill="#0F0F11"></circle>
+  </svg>
+  <div class="glass">
+    <div>
+      <p style="margin: 0; font-size: 15px; font-weight: 500">Klub360</p>
+      <p style="margin: 0; font-size: 13px; color: var(--soft)">Juffair · Manama</p>
+    </div>
+    <span style="font-size: 13px; color: var(--text-2)">Open in Google Maps →</span>
+  </div>
+</a>

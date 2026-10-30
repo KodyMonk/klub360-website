@@ -1,0 +1,43 @@
+---
+// Big event card used on the homepage and the Events page.
+// Shows the 1080 × 1350 flyer next to the details.
+import type { EventRow } from '../lib/supabase';
+import { dayMonth, weekday } from '../lib/format';
+import { site, waLink } from '../content/site';
+
+interface Props { event: EventRow }
+const { event } = Astro.props;
+const href = `/events/${event.slug}/`;
+const tableMsg = `Hi Klub360, I'd like to reserve a table for ${event.title} on ${event.event_date}.`;
+---
+<article class="card event-feature" data-event-date={event.event_date}>
+  <div class="art-col">
+    <a href={href} aria-label={`${event.title} details`}>
+      {event.flyer_url
+        ? <img class="art" src={event.flyer_url} alt={`${event.title} flyer`} width="1080" height="1350" loading="lazy" />
+        : <span class="art-slot"><span>Event artwork</span><span>1080 × 1350</span></span>}
+    </a>
+  </div>
+  <div class="info">
+    <div style="display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap">
+      <span class="date-big">{dayMonth(event.event_date)}</span>
+      <span class="small-caps">{weekday(event.event_date)} · Doors {event.doors || site.doorsDefault}</span>
+    </div>
+    <h2 class="h2" style="font-size: clamp(34px, 3.6vw, 52px)">
+      {event.title}
+      {event.headliner && <> <span class="serif dim">ft.</span> {event.headliner}</>}
+    </h2>
+    {event.description && <p class="muted" style="margin: 0; max-width: 460px; font-weight: 300">{event.description}</p>}
+    {(event.genre || event.price) && (
+      <div class="stats">
+        {event.genre && <div><p class="v">{event.genre}</p><p class="k">Music</p></div>}
+        {event.price && <div><p class="v">{event.price}</p><p class="k">From BHD</p></div>}
+      </div>
+    )}
+    <div class="actions">
+      {event.ticket_url && <a class="btn btn-primary" href={event.ticket_url} rel="noopener">Get tickets <span aria-hidden="true">→</span></a>}
+      <a class={event.ticket_url ? 'btn' : 'btn btn-primary'} href={waLink(tableMsg)}>Reserve a table</a>
+      <a class="link" href={href}>Event details</a>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import MapCard from '../components/MapCard.astro';
+import ContactForm from '../components/react/ContactForm';
+import { site } from '../content/site';
+---
+<Base title="Contact Us" current="contact" description="Contact Klub360 in Juffair, Bahrain. WhatsApp +973 3811 1360, Tel +973 1736 0300.">
+  <PageHead eyebrow="Contact us" title="Get in" accent="touch." />
+
+  <section class="container section-end">
+    <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: stretch">
+      <div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+        <div class="lines">
+          <div style="padding: 22px 0"><p class="small-caps" style="margin: 0">WhatsApp</p><a href={`https://wa.me/${site.whatsapp}`} style="display: inline-block; margin-top: 4px; font-size: 26px; font-weight: 300; letter-spacing: -.02em; text-decoration: none">{site.whatsappDisplay}</a></div>
+          <div style="padding: 22px 0"><p class="small-caps" style="margin: 0">Telephone</p><a href={`tel:${site.phone}`} style="display: inline-block; margin-top: 4px; font-size: 26px; font-weight: 300; letter-spacing: -.02em; text-decoration: none">{site.phoneDisplay}</a><p class="dim" style="margin: 2px 0 0; font-size: 13px">Fax {site.fax}</p></div>
+          <div style="padding: 22px 0"><p class="small-caps" style="margin: 0">Address</p><p style="margin: 4px 0 0">{site.address}</p></div>
+          <div style="padding: 22px 0"><p class="small-caps" style="margin: 0">Hours</p><p style="margin: 4px 0 0">{site.hours}</p></div>
+        </div>
+        <MapCard height={280} />
+      </div>
+      <div class="card" style="flex: 1 1 520px; min-width: 0; padding: clamp(24px, 4vw, 56px)">
+        <h2 class="h2" style="font-size: 36px; margin-bottom: 28px">Send us a <span class="serif">message.</span></h2>
+        <ContactForm client:visible whatsapp={site.whatsapp} />
+      </div>
+    </div>
+  </section>
+</Base>

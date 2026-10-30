@@ -1,0 +1,7 @@
+---
+import Base from '../layouts/Base.astro';
+import AdminApp from '../components/react/admin/AdminApp';
+---
+<Base title="Admin" noindex bare>
+  <AdminApp client:only="react" />
+</Base>

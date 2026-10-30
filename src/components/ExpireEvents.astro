@@ -1,0 +1,19 @@
+---
+// The site is pre-built, so an event can stay on the page for a few hours
+// after its date until the nightly rebuild runs. This tiny script hides any
+// event card whose date has passed (Bahrain time) and shows the
+// "coming soon" message instead when nothing is left.
+---
+<script>
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Bahrain' }).format(new Date());
+  document.querySelectorAll<HTMLElement>('[data-events]').forEach((group) => {
+    const cards = group.querySelectorAll<HTMLElement>('[data-event-date]');
+    let visible = 0;
+    cards.forEach((card) => {
+      if ((card.dataset.eventDate ?? '') < today) card.hidden = true;
+      else visible++;
+    });
+    const empty = group.querySelector<HTMLElement>('[data-events-empty]');
+    if (empty && cards.length > 0 && visible === 0) empty.hidden = false;
+  });
+</script>
